@@ -21,16 +21,20 @@ func ReqeustHandler(w http.ResponseWriter, r *http.Request) {
 	res := Data{}
 	switch r.Method {
 	case "GET":
-		err := json.NewEncoder(w).Encode(getResponse)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+		{
+			err := json.NewEncoder(w).Encode(getResponse)
+			if err != nil {
+				fmt.Println("ERROR!")
+			}
 		}
-	case "POST":
-		err := json.NewDecoder(r.Body).Decode(&res)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+	case "POST": 
+		{
+			err := json.NewDecoder(r.Body).Decode(&res)
+			if err != nil {
+				fmt.Println("ERROR!")
+			}
+			fmt.Fprintf(w, "input: %+v", res)
 		}
-		fmt.Fprintf(w, "input: %+v", res)
 	default:
 		w.WriteHeader(http.StatusNotFound)
 	}
@@ -41,5 +45,5 @@ func main() {
 	http.HandleFunc("/", ReqeustHandler)
 	fmt.Println("Starting server at Localhost")
 	http.ListenAndServe(":8080", nil)
-	
+
 }
